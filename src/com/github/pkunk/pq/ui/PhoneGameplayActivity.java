@@ -61,11 +61,6 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
         tabHost.addTab(tabHost.newTabSpec("ph_tab_plot").setIndicator("  Plot  ").setContent(R.id.ph_tab_plot));
         tabHost.addTab(tabHost.newTabSpec("ph_tab_quests").setIndicator("  Quests  ").setContent(R.id.ph_tab_quests));
 
-        for (int i=0; i<tabHost.getTabWidget().getChildCount(); i++) {
-            TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-            tv.setTextColor(Color.WHITE);
-        }
-
         int tabState = Vfs.getTabState(this);
         tabHost.setCurrentTab(tabState);
     }
