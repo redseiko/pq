@@ -7,7 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.service.GameplayService;
 import com.github.pkunk.pq.ui.PhoneGameplayActivity;
 

@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.*;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.gameplay.Equips;
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.Stats;

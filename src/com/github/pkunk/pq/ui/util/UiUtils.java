@@ -8,7 +8,7 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TableRow;
 import android.widget.TextView;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.Traits;
 import com.github.pkunk.pq.ui.view.TextProgressBar;

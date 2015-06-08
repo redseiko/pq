@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.RaceClass;
 import com.github.pkunk.pq.gameplay.Stats;

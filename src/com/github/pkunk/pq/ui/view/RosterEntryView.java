@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.ui.util.UiUtils;
 
 /**

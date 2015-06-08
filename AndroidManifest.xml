@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
         xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.github.pkunk.pq"
+        package="com.rosch.pq.remix"
         android:versionCode="4"
         android:versionName="0.4"
         >
     <uses-sdk
             android:minSdkVersion="6"
-            android:targetSdkVersion="10"
+            android:targetSdkVersion="22"
             />
 
     <application
@@ -16,7 +16,7 @@
             >
 
         <activity
-                android:name=".ui.PhoneGameplayActivity"
+                android:name="com.github.pkunk.pq.ui.PhoneGameplayActivity"
                 android:icon="@drawable/icon"
                 android:theme="@style/Redmond"
                 android:finishOnTaskLaunch="true"
@@ -29,7 +29,7 @@
         </activity>
 
         <activity
-                android:name=".ui.PhoneNewPlayerActivity"
+                android:name="com.github.pkunk.pq.ui.PhoneNewPlayerActivity"
                 android:configChanges="orientation|keyboardHidden"
                 android:icon="@drawable/icon"
                 android:theme="@style/Redmond"
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-                android:name=".ui.PhoneRosterActivity"
+                android:name="com.github.pkunk.pq.ui.PhoneRosterActivity"
                 android:configChanges="orientation|keyboardHidden"
                 android:icon="@drawable/icon"
                 android:theme="@style/Redmond"
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.GameplayService" />
+        <service android:name="com.github.pkunk.pq.service.GameplayService" />
 
         <receiver android:name="com.github.pkunk.pq.widget.WidgetProvider" >
             <intent-filter>

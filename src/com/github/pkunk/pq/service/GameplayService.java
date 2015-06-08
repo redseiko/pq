@@ -9,7 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.ui.util.UiUtils;
 import com.github.pkunk.pq.util.Vfs;

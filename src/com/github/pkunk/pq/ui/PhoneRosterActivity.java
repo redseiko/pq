@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import com.github.pkunk.pq.R;
+import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.init.Res;
 import com.github.pkunk.pq.service.GameplayService;
 import com.github.pkunk.pq.ui.view.RosterEntryView;
