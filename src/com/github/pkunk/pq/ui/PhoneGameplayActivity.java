@@ -9,11 +9,13 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.*;
+
 import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.gameplay.Equips;
 import com.github.pkunk.pq.gameplay.Player;
@@ -34,7 +36,7 @@ import java.util.Map;
  * User: pkunk
  * Date: 2012-01-25
  */
-public class PhoneGameplayActivity extends Activity implements GameplayServiceListener {
+public class PhoneGameplayActivity extends AppCompatActivity implements GameplayServiceListener {
     private static final String TAG = PhoneGameplayActivity.class.getCanonicalName();
 
     private String playerId;

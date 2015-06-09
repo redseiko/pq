@@ -13,12 +13,12 @@
     <application
             android:icon="@drawable/icon"
             android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light"
             >
 
         <activity
                 android:name="com.github.pkunk.pq.ui.PhoneGameplayActivity"
                 android:icon="@drawable/icon"
-                android:theme="@style/Redmond"
                 android:finishOnTaskLaunch="true"
                 android:configChanges="orientation|keyboardHidden"
                 >
@@ -32,7 +32,6 @@
                 android:name="com.github.pkunk.pq.ui.PhoneNewPlayerActivity"
                 android:configChanges="orientation|keyboardHidden"
                 android:icon="@drawable/icon"
-                android:theme="@style/Redmond"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,7 +42,6 @@
                 android:name="com.github.pkunk.pq.ui.PhoneRosterActivity"
                 android:configChanges="orientation|keyboardHidden"
                 android:icon="@drawable/icon"
-                android:theme="@style/Redmond"
                 >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
