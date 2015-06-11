@@ -1,22 +1,28 @@
 package com.github.pkunk.pq.ui;
 
+import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.*;
+import android.widget.ScrollView;
+import android.widget.TabHost;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
-import com.rosch.pq.remix.R;
 import com.github.pkunk.pq.gameplay.Equips;
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.Stats;
@@ -28,9 +34,7 @@ import com.github.pkunk.pq.ui.util.UiUtils;
 import com.github.pkunk.pq.util.PqUtils;
 import com.github.pkunk.pq.util.Roman;
 import com.github.pkunk.pq.util.Vfs;
-
-import java.util.List;
-import java.util.Map;
+import com.rosch.pq.remix.R;
 
 /**
  * User: pkunk
@@ -63,6 +67,9 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
 
         int tabState = Vfs.getTabState(this);
         tabHost.setCurrentTab(tabState);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
