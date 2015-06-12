@@ -19,6 +19,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TableLayout;
@@ -76,11 +80,24 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, android.R.string.yes, android.R.string.no);
         
         drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
+        
+        String[] sections = new String[] { "Character", "Spells", "Equip", "Inventory", "Plot", "Quests" };
+        
+        ListView drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sections));
+        
+        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				tabHost.setCurrentTab(position);
+				drawerLayout.closeDrawers();
+			}
+        });
     }
 
     @Override
