@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:background="@color/background_material_dark" >
+    android:padding="10dp" >
 
     <TextView
         android:id="@+id/ph_task_text"

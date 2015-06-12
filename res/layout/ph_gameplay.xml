@@ -1,60 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.rosch.pq.remix"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp" /> <!-- TODO: move me into a theme for API 21+ -->
+        android:background="@color/background_material_dark"
+        android:elevation="4dp"
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-    <TabHost
-        android:id="@android:id/tabhost"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar" >
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <HorizontalScrollView
+            <TabHost
+                android:id="@android:id/tabhost"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none" >
+                android:layout_height="wrap_content" >
 
-                <TabWidget
-                    android:id="@android:id/tabs"
+                <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </HorizontalScrollView>
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="1dp" >
+                    <HorizontalScrollView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:fillViewport="true"
+                        android:scrollbars="none" >
 
-                <include layout="@layout/character_fragment" />
+                        <TabWidget
+                            android:id="@android:id/tabs"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content" />
+                    </HorizontalScrollView>
 
-                <include layout="@layout/spells_fragment" />
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp" >
 
-                <include layout="@layout/equip_fragment" />
+                        <include layout="@layout/character_fragment" />
 
-                <include layout="@layout/items_fragment" />
+                        <include layout="@layout/spells_fragment" />
 
-                <include layout="@layout/plot_fragment" />
+                        <include layout="@layout/equip_fragment" />
 
-                <include layout="@layout/quests_fragment" />
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+                        <include layout="@layout/items_fragment" />
 
-    <include layout="@layout/statusbar_fragment" />
+                        <include layout="@layout/plot_fragment" />
 
-</RelativeLayout>
+                        <include layout="@layout/quests_fragment" />
+                    </FrameLayout>
+                </LinearLayout>
+            </TabHost>
+
+            <include layout="@layout/statusbar_fragment" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/background_material_light"
+            android:choiceMode="singleChoice" />
+    </android.support.v4.widget.DrawerLayout>
+
+</LinearLayout>
