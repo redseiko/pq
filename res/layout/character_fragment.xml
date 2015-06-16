@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ph_tab_char"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
-    <TextView
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Character Sheet"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:paddingBottom="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="5dp"
+            android:text="@string/level_progressbar_label"
+            android:textStyle="bold" />
+
+        <com.github.pkunk.pq.ui.view.TextProgressBar
+            android:id="@+id/ph_level_bar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -23,25 +38,13 @@
 
             <TableLayout
                 android:id="@+id/ph_traits_table"
-                style="@style/RedmondTable"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
                 android:stretchColumns="*" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Experience" />
-
-            <com.github.pkunk.pq.ui.view.TextProgressBar
-                android:id="@+id/ph_level_bar"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
 
             <TableLayout
                 android:id="@+id/ph_stats_table"
-                style="@style/RedmondTable"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="*" />

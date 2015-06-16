@@ -13,4 +13,32 @@
         For source code and feedback about the Android port, see\n
         https://github.com/pkunk/pq/\n
     </string>
+    
+    <string name="character_fragment_page_title">Character</string>
+    <string name="spells_fragment_page_title">Spells</string>
+    <string name="equipment_fragment_page_title">Equipment</string>
+    <string name="items_fragment_page_title">Items</string>
+    <string name="plot_fragment_page_title">Plot</string>
+    <string name="quests_fragment_page_title">Quests</string>
+    
+    <string-array name="player_fragment_page_titles">
+        <item>@string/character_fragment_page_title</item>
+        <item>@string/spells_fragment_page_title</item>
+        <item>@string/equipment_fragment_page_title</item>
+        <item>@string/items_fragment_page_title</item>
+        <item>@string/plot_fragment_page_title</item>
+        <item>@string/quests_fragment_page_title</item>
+    </string-array>
+    
+    <string name="level_progressbar_label">Experience</string>
+    <string name="level_progressbar_text">%1$d XP until next level</string>
+    
+    <string name="encumberance_progressbar_label">Encumberance</string>
+    <string name="encumberance_progressbar_text">%1$d / %2$d cubits</string>
+    
+    <string name="development_progressbar_label">Plot Development</string>
+    <string name="development_progressbar_text">%1$s remaining</string>
+    
+    <string name="completion_progressbar_label">Quest Progress</string>
+    <string name="completion_progressbar_text">%1$d%% complete</string>
 </resources>

@@ -20,54 +20,35 @@
         android:layout_height="match_parent" >
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-            <TabHost
-                android:id="@android:id/tabhost"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+            <LinearLayout
+                android:id="@+id/main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/statusbar_fragment"
+                android:orientation="vertical" >
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical" >
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/content_tablayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_material_dark"
+                    android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-                    <HorizontalScrollView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:fillViewport="true"
-                        android:scrollbars="none" >
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/content_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
 
-                        <TabWidget
-                            android:id="@android:id/tabs"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content" />
-                    </HorizontalScrollView>
-
-                    <FrameLayout
-                        android:id="@android:id/tabcontent"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp" >
-
-                        <include layout="@layout/character_fragment" />
-
-                        <include layout="@layout/spells_fragment" />
-
-                        <include layout="@layout/equip_fragment" />
-
-                        <include layout="@layout/items_fragment" />
-
-                        <include layout="@layout/plot_fragment" />
-
-                        <include layout="@layout/quests_fragment" />
-                    </FrameLayout>
-                </LinearLayout>
-            </TabHost>
-
-            <include layout="@layout/statusbar_fragment" />
+            <fragment
+                android:id="@+id/statusbar_fragment"
+                android:name="com.rosch.pq.remix.ui.StatusBarFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
 
         <ListView

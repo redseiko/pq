@@ -1,43 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ph_tab_spell"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
-    <LinearLayout
-        android:id="@+id/ph_tab_spell_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical" >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Spell Book"
-            android:textStyle="bold" />
-    </LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <ScrollView
         android:id="@+id/ph_spell_scroll"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/ph_tab_spell_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
-
-            <TableLayout
-                android:id="@+id/ph_spell_table"
-                style="@style/RedmondTable"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:stretchColumns="0" />
-        </LinearLayout>
+        <TableLayout
+            android:id="@+id/ph_spell_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0" />
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

@@ -4,19 +4,6 @@
     <style name="AppTheme" parent="AppBaseTheme" />
 
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
-    </style>
-
-    <style name="Redmond">
-        <item name="android:textColor">#FF000000</item>
-        <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <style name="RedmondTable">
-        <item name="android:layout_marginLeft">6dp</item>
-        <item name="android:layout_marginRight">6dp</item>
-        <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:layout_marginTop">4dp</item>
     </style>
 
     <style name="About">
