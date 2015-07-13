@@ -1,16 +1,16 @@
 package com.github.pkunk.pq.ui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 import com.github.pkunk.pq.init.Res;
 import com.github.pkunk.pq.service.GameplayService;
 import com.github.pkunk.pq.util.Vfs;
 import com.rosch.pq.remix.R;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,12 +23,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -40,17 +43,11 @@ public class PhoneRosterActivity extends AppCompatActivity
 {
 	private static final String TAG = PhoneRosterActivity.class.getCanonicalName();
 
-	private Map<View, String> playViewsMap;
-	private Map<View, String> killViewsMap;
-	private Map<String, View> rosterEntriesMap;
-	private Map<String, String> namesMap;
-
-	private String playerIdToKill;
-
 	private GameplayService service;
 	private volatile boolean isBound = false;
 
 	private Toolbar rosterToolbar;
+	private ListView savesListView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -64,22 +61,33 @@ public class PhoneRosterActivity extends AppCompatActivity
 		ActionBar actionBar = (ActionBar) getSupportActionBar();
 		actionBar.setTitle(R.string.roster_activity_title);
 
-		populateView();
+		savesListView = (ListView) findViewById(R.id.roster_saves);
+		
+		RosterSavesAdapter adapter = new RosterSavesAdapter();
+		adapter.setData(this);
+		
+		savesListView.setAdapter(adapter);
+		savesListView.setOnItemClickListener(adapter);
 	}
-
+	
 	@Override
-	protected void onStart() {
+	protected void onStart()
+	{
 		super.onStart();
+		
 		Intent intent = new Intent(this, GameplayService.class);
 		bindService(intent, connection, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
-	protected void onStop() {
-		if (isBound) {
+	protected void onStop()
+	{
+		if (isBound)
+		{
 			unbindService(connection);
 			isBound = false;
 		}
+
 		super.onStop();
 	}
 
@@ -124,54 +132,108 @@ public class PhoneRosterActivity extends AppCompatActivity
 		}
 	};
 
-	private void populateView() {
-		String[] saveFiles = Vfs.getPlayersSaveFiles(this);
-		Arrays.sort(saveFiles);
-
-		Map<String, List<String>> statusMap = Vfs.readEntryFromFiles(this, saveFiles, "Annotation");
-		ViewGroup rosterGroup = (ViewGroup) findViewById(R.id.ph_roster_saves);
-
-		playViewsMap = new WeakHashMap<View, String>(saveFiles.length);
-		killViewsMap = new WeakHashMap<View, String>(saveFiles.length);
-		rosterEntriesMap = new HashMap<String, View>(saveFiles.length);
-		namesMap = new HashMap<String, String>(saveFiles.length);
-
-		PlayListener playListener = new PlayListener();
-		KillListener killListener = new KillListener();
-
-		for (String file : saveFiles)
+	private void createNewPlayer()
+	{
+		Intent intent = new Intent(this, PhoneNewPlayerActivity.class);
+		startActivity(intent);
+	}
+	
+	private class RosterSavesAdapter extends BaseAdapter implements AdapterView.OnItemClickListener
+	{
+		private List<PlayerAnnotation> rosterSaves;
+		
+		public void setData(Activity activity)
 		{
-			PlayerAnnotation player = getStatus(statusMap.get(file));
+			rosterSaves = new ArrayList<PlayerAnnotation>();
 			
-			View view = getLayoutInflater().inflate(R.layout.roster_entry_listitem, rosterGroup, false);
+			String[] saveFiles = Vfs.getPlayersSaveFiles(activity);
+			Arrays.sort(saveFiles);
+			
+			Map<String, List<String>> statusMap = Vfs.readEntryFromFiles(activity, saveFiles, "Annotation");
+			
+			for (String file : saveFiles)
+			{
+				PlayerAnnotation player = getStatus(statusMap.get(file));
+				rosterSaves.add(player);
+			}		
+		}
+
+		@Override
+		public int getCount()
+		{
+			return rosterSaves.size();
+		}
+
+		@Override
+		public Object getItem(int position)
+		{
+			return rosterSaves.get(position);
+		}
+
+		@Override
+		public long getItemId(int position)
+		{
+			return position;
+		}
+
+		@Override
+		public View getView(final int position, View convertView, final ViewGroup parent)
+		{
+			if (convertView == null)
+			{
+				LayoutInflater inflater = getLayoutInflater();
+				convertView = inflater.inflate(R.layout.roster_entry_listitem, parent, false);
+			}
+			
+			View view = convertView;
+			PlayerAnnotation player = rosterSaves.get(position);
+			
 			((TextView) view.findViewById(R.id.player_status1)).setText(player.status1);
 			((TextView) view.findViewById(R.id.player_status2)).setText(player.status2);
 			((TextView) view.findViewById(R.id.player_status3)).setText(player.status3);
 			
-			View playView = view.findViewById(R.id.roster_entry_status);
-			View killView = view.findViewById(R.id.roster_entry_delete_image);
+			view.findViewById(R.id.roster_entry_status).setOnClickListener(new View.OnClickListener()
+			{
+				@Override
+				public void onClick(View view)
+				{
+					((ListView) parent).performItemClick(view, position, getItemId(position));
+				}
+			});
 			
-			playViewsMap.put(playView, player.playerId);
-			killViewsMap.put(killView, player.playerId);
+			view.findViewById(R.id.roster_entry_delete_image).setOnClickListener(new View.OnClickListener()
+			{
+				@Override
+				public void onClick(View view)
+				{
+					((ListView) parent).performItemClick(view, position, getItemId(position));
+				}
+			});
 			
-			playView.setOnClickListener(playListener);
-			killView.setOnClickListener(killListener);
-			
-			rosterGroup.addView(view);
+			return view;
+		}
 
-			rosterEntriesMap.put(player.playerId, view);
-			namesMap.put(player.playerId, player.name);
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+		{
+			int viewId = view.getId();
+			PlayerAnnotation player = rosterSaves.get(position);
+			
+			switch (viewId)
+			{
+				case R.id.roster_entry_status:
+					selectPlayer(player.playerId);
+					break;
+					
+				case R.id.roster_entry_delete_image:
+					showDeletePlayerConfirmation(player.playerId, player.name);
+					break;
+			}
 		}
 	}
 
-	private void removeRosterEntry(String playerId) {
-		View view = rosterEntriesMap.get(playerId);
-		rosterEntriesMap.remove(playerId);
-		namesMap.remove(playerId);
-		((ViewGroup)view.getParent()).removeView(view);
-	}
-
-	private PlayerAnnotation getStatus(List<String> strings) {
+	private PlayerAnnotation getStatus(List<String> strings)
+	{
 		PlayerAnnotation result = new PlayerAnnotation();
 		for (String s : strings) {
 			String entry[] = s.split(Vfs.EQ);
@@ -190,14 +252,15 @@ public class PhoneRosterActivity extends AppCompatActivity
 		return result;
 	}
 
-	private void createNewPlayer() {
-		Intent intent = new Intent(this, PhoneNewPlayerActivity.class);
-		if (namesMap.isEmpty()) {
-			finish();
-		}
-		startActivity(intent);
+	private static class PlayerAnnotation
+	{
+		private String playerId = null;
+		private String status1 = "";
+		private String status2 = "";
+		private String status3 = "";
+		private String name = null;
 	}
-
+	
 	private void selectPlayer(String playerId) {
 		Vfs.setPlayerId(this, playerId);
 		Intent intent = new Intent(this, PhoneGameplayActivity.class);
@@ -205,61 +268,40 @@ public class PhoneRosterActivity extends AppCompatActivity
 		startActivity(intent);
 		finish();
 	}
-
-	private void killPlayer() {
-		String currentPlayerId = Vfs.getPlayerId(this);
-
-		if (playerIdToKill.equals(currentPlayerId)) {
-			Vfs.setPlayerId(this, null);
-			service.removePlayer();
-		}
-		Vfs.deletePlayerFiles(this, playerIdToKill);
-		removeRosterEntry(playerIdToKill);
-	}
-
-	private AlertDialog killConfirmationDialog() {
-		String playerName;
-		playerName = namesMap.get(playerIdToKill);
-		if (playerName == null) {
-			playerName = "Hero";
-		}
-		String confirmationText = "Terminate " + Res.MERITS.pick() + " " + playerName + "?";
+	
+	private void showDeletePlayerConfirmation(final String playerId, String name)
+	{
+		String confirmationText = "Terminate " + Res.MERITS.pick() + " " + name + "?";
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(confirmationText)
-		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				killPlayer();
+		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int id)
+			{
+				killPlayer(playerId);
 			}
 		})
-		.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		});
-		return builder.create();
+		.setNegativeButton(android.R.string.cancel, null)
+		.create()
+		.show();
 	}
+	
+	private void killPlayer(String playerId)
+	{
+		String currentPlayerId = Vfs.getPlayerId(this);
 
-	private static class PlayerAnnotation {
-		private String playerId = null;
-		private String status1 = "";
-		private String status2 = "";
-		private String status3 = "";
-		private String name = null;
-	}
-
-	private class PlayListener implements OnClickListener {
-		@Override
-		public void onClick(View v) {
-			selectPlayer(playViewsMap.get(v));
+		if (playerId.equals(currentPlayerId))
+		{
+			Vfs.setPlayerId(this, null);
+			service.removePlayer();
 		}
-	}
-
-	private class KillListener implements OnClickListener {
-		@Override
-		public void onClick(View v) {
-			playerIdToKill =  killViewsMap.get(v);
-			killConfirmationDialog().show();
-		}
+		
+		Vfs.deletePlayerFiles(this, playerId);
+		
+		RosterSavesAdapter adapter = (RosterSavesAdapter) savesListView.getAdapter();
+		
+		adapter.setData(this);
+		adapter.notifyDataSetChanged();
 	}
 }
