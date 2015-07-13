@@ -1,50 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#CCCCCC"
-        >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background_material_dark"
+        android:elevation="4dp"
+        android:theme="@style/Theme.AppCompat.NoActionBar" />
+
     <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:id="@+id/ph_roster_saves"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true"
-            >
-        <LinearLayout
-                android:id="@+id/ph_roster_saves"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-            <RelativeLayout
-                    android:id="@+id/ph_roster_newplayer"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#FFE7E7E7"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
-                    >
-                <TextView
-                        android:id="@+id/ph_roster_newplayer_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:textStyle="bold"
-                        android:text="New Character"
-                        />
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/ph_roster_newplayer_text"
-                        android:src="@drawable/dicebar"
-                        />
-            </RelativeLayout>
+            android:orientation="vertical" >
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

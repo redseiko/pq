@@ -41,4 +41,7 @@
     
     <string name="completion_progressbar_label">Quest Progress</string>
     <string name="completion_progressbar_text">%1$d%% complete</string>
+    
+    <string name="roster_activity_title">Roster</string>
+    <string name="roster_menu_new_character_title">New Character</string>
 </resources>
