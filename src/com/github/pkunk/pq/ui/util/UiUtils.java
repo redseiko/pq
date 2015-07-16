@@ -1,18 +1,18 @@
 package com.github.pkunk.pq.ui.util;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TableRow;
 import android.widget.TextView;
-import com.rosch.pq.remix.R;
+
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.Traits;
 import com.github.pkunk.pq.ui.view.TextProgressBar;
 import com.github.pkunk.pq.util.PqUtils;
+import com.rosch.pq.remix.R;
 
 /**
  * User: pkunk
@@ -106,12 +106,6 @@ public class UiUtils {
         }
         statusText.append(player.getBestStat());
         return statusText.toString();
-    }
-
-    public static Dialog aboutDialog(Context context) {
-        Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.about);
-        return dialog;
     }
 
     public static int generateViewId() {

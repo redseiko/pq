@@ -1,18 +1,8 @@
 <resources>
     <string name="app_name">Progress Quest Remix</string>
-    <string name="about_text">
-        Progress Quest\n
-        \n
-        Android version 0.4\n
-        Port by pkunk\n
-        pkunk.ab+pq@gmail.com\n
-        \n
-        For more info about the game, see\n
-        http://progressquest.com/\n
-        \n
-        For source code and feedback about the Android port, see\n
-        https://github.com/pkunk/pq/\n
-    </string>
+    
+    <string name="about_dialog_title">About</string>
+    <string name="about_dialog_message">Progress Quest\nAndroid version 0.4\n\nPort by pkunk\npkunk.ab+pq@gmail.com\n\nFor more info about the game, see\nhttp://progressquest.com/\n\nFor source code and feedback about the Android port, see:\n\nhttps://github.com/pkunk/pq/\n</string>
     
     <string name="character_fragment_page_title">Character</string>
     <string name="spells_fragment_page_title">Spells</string>

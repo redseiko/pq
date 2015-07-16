@@ -13,9 +13,11 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,7 +29,6 @@ import android.widget.ListView;
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.service.GameplayService;
 import com.github.pkunk.pq.service.GameplayServiceListener;
-import com.github.pkunk.pq.ui.util.UiUtils;
 import com.github.pkunk.pq.util.Vfs;
 import com.rosch.pq.remix.R;
 import com.rosch.pq.remix.events.PlayerModifiedEvent;
@@ -164,8 +165,16 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     }
 
     private void openAbout() {
-        Dialog aboutDialog = UiUtils.aboutDialog(this);
-        aboutDialog.show();
+    	new DialogFragment() {
+    		@Override
+    		public Dialog onCreateDialog(Bundle savedInstancedState) {		
+    			return new AlertDialog.Builder(getActivity())
+    				.setTitle(R.string.about_dialog_title)
+    				.setMessage(R.string.about_dialog_message)
+    				.setPositiveButton(android.R.string.ok, null)
+    				.create();
+    		}
+    	}.show(getSupportFragmentManager(), "about-dialog");
     }
 
     private void updateUi(Player player, boolean forceRefresh) {
