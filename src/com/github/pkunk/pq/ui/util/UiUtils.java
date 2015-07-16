@@ -109,7 +109,7 @@ public class UiUtils {
     }
 
     public static Dialog aboutDialog(Context context) {
-        Dialog dialog = new Dialog(context, R.style.About);
+        Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.about);
         return dialog;
     }

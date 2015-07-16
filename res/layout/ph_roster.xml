@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/background_material_dark"
-        android:elevation="4dp"
-        android:theme="@style/Theme.AppCompat.NoActionBar" />
+        android:theme="@style/ToolBarTheme" />
 
     <ListView
         android:id="@+id/roster_saves"

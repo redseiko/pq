@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/background_material_dark"
-        android:elevation="4dp"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/ToolBarTheme"
         app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar" />
 
     <android.support.v4.widget.DrawerLayout

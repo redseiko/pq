@@ -2,12 +2,9 @@
 <resources>
 
     <style name="AppTheme" parent="AppBaseTheme" />
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    </style>
-
-    <style name="About">
-        <item name="android:textColor">#FFFFFFFF</item>
-    </style>
+    <style name="ToolBarTheme" parent="ToolBarThemeBase" />
+    <style name="ToolBarThemeBase" parent="Theme.AppCompat.NoActionBar" />
 
 </resources>

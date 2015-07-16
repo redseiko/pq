@@ -1,10 +1,15 @@
 package com.github.pkunk.pq.ui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.TabLayout;
@@ -14,9 +19,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,6 +46,10 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
 
     private GameplayService service;
     private volatile boolean isBound = false;
+    
+    private Toolbar mainToolbar;    
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,29 +63,8 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOffscreenPageLimit(6);
 		
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, android.R.string.yes, android.R.string.no);
-        
-        drawerLayout.setDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-        
-        ListView drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<String>(
-        	this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.player_fragment_page_titles)));
-        
-        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				((ViewPager) findViewById(R.id.content_viewpager)).setCurrentItem(position);
-				drawerLayout.closeDrawers();
-			}
-        });
+		setupToolbar();
+        setupNavigationDrawer();
         
         TabLayout tabLayout = (TabLayout)  findViewById(R.id.content_tablayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -119,13 +104,6 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
     public void onGameplay() {
         if (isBound) {
             // Don't block this thread
@@ -134,18 +112,50 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_roster:
-                openRoster();
-                return true;
-            case R.id.menu_about:
-                openAbout();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    private void setupToolbar()
+    {
+    	mainToolbar = (Toolbar) findViewById(R.id.toolbar);
+    	setSupportActionBar(mainToolbar);
+
+    	getSupportActionBar().setHomeButtonEnabled(true);
+    	getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setupNavigationDrawer()
+    {
+    	drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    	ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mainToolbar, android.R.string.yes, android.R.string.no);
+
+    	drawerLayout.setDrawerListener(drawerToggle);
+    	drawerToggle.syncState();
+
+    	Resources resources = getResources();    
+    	List<String> drawerItems = new ArrayList<String>(Arrays.asList(resources.getStringArray(R.array.player_fragment_page_titles)));
+
+    	drawerItems.add((String) resources.getText(R.string.drawer_item_roster_label));
+    	drawerItems.add((String) resources.getText(R.string.drawer_item_about_label));
+    	
+    	drawerList = (ListView) findViewById(R.id.left_drawer);
+    	drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
+
+    	drawerList.setOnItemClickListener(new ListView.OnItemClickListener()
+    	{
+    		@Override
+    		public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    		{
+    			drawerLayout.closeDrawers();
+    			
+    			int count = drawerList.getAdapter().getCount();
+
+    			if (position < (count - 2)) {
+    				((ViewPager) findViewById(R.id.content_viewpager)).setCurrentItem(position);
+    			} else if (position == (count - 2)) {
+    				openRoster();    				
+    			} else if (position == (count - 1)) {
+    				openAbout();
+    			}
+    		}
+    	});
     }
 
     private void openRoster() {
