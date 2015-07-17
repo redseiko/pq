@@ -1,5 +1,8 @@
 package com.rosch.pq.remix.ui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import android.os.Bundle;
@@ -7,12 +10,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.pkunk.pq.gameplay.Player;
-import com.github.pkunk.pq.ui.util.UiUtils;
 import com.github.pkunk.pq.ui.view.TextProgressBar;
 import com.rosch.pq.remix.R;
 import com.rosch.pq.remix.events.PlayerModifiedEvent;
@@ -22,8 +24,9 @@ import de.greenrobot.event.Subscribe;
 
 public class ItemsFragment extends Fragment
 {
-	private TableLayout itemsTable;
-	private ScrollView itemsTableScroll;
+	private ListView itemsListView;
+	private ItemsListAdapter itemsListAdapter;
+
 	private TextProgressBar encumberanceProgressBar;
 	
 	@Override
@@ -31,8 +34,11 @@ public class ItemsFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.items_fragment, container, false);
 		
-		itemsTable = (TableLayout) view.findViewById(R.id.ph_items_table);
-		itemsTableScroll = (ScrollView) view.findViewById(R.id.ph_items_scroll);
+		itemsListAdapter = new ItemsListAdapter();
+
+		itemsListView = (ListView) view.findViewById(R.id.items_listview);
+		itemsListView.setAdapter(itemsListAdapter);
+		
 		encumberanceProgressBar = (TextProgressBar) view.findViewById(R.id.ph_encum_bar);
 		
 		return view;
@@ -63,21 +69,55 @@ public class ItemsFragment extends Fragment
 		
 		refreshEncumberanceProgressBar(player.getCurrentEncumbrance(), player.getMaxEncumbrance());
 	}
+	
+	private class ItemsListAdapter extends BaseAdapter
+	{
+		private List<Map.Entry<String, Integer>> itemsList = Collections.emptyList();
+		
+		public void setItems(Map<String, Integer> items)
+		{
+			itemsList = new ArrayList<Map.Entry<String, Integer>>(items.entrySet());
+		}
+		
+		@Override
+		public int getCount()
+		{
+			return itemsList.size();
+		}
+
+		@Override
+		public Object getItem(int position)
+		{
+			return itemsList.get(position);
+		}
+
+		@Override
+		public long getItemId(int position)
+		{
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			if (convertView == null)
+				convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_listitem, parent, false);
+			
+			String itemTitle = itemsList.get(position).getKey();
+			int itemQuantity = itemsList.get(position).getValue();
+			
+			((TextView) convertView.findViewById(R.id.item_title)).setText(itemTitle);
+			((TextView) convertView.findViewById(R.id.item_quantity)).setText(itemQuantity > 1 ? String.valueOf(itemQuantity) : "");
+			
+			return convertView;
+		}
+		
+	}
 
 	private void refreshItemsTable(Map<String, Integer> items, boolean goldUpdated)
 	{
-        itemsTable.removeAllViews();
-
-        TableRow header = UiUtils.getHeaderRow(itemsTable.getContext(), "Item", "Qty");
-        itemsTable.addView(header);
-        
-        for (Map.Entry<String,Integer> item : items.entrySet())
-        {
-            TableRow row = UiUtils.getTableRow(itemsTable.getContext(), item.getKey(), item.getValue().toString());
-            itemsTable.addView(row);
-        }
-        
-        itemsTableScroll.fullScroll(goldUpdated ? ScrollView.FOCUS_UP : ScrollView.FOCUS_DOWN);
+		itemsListAdapter.setItems(items);
+		itemsListAdapter.notifyDataSetChanged();
 	}
 	
 	private void refreshEncumberanceProgressBar(int currentEncumberance, int maxEncumberance)
