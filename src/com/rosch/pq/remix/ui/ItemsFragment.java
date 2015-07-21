@@ -40,7 +40,7 @@ public class ItemsFragment extends Fragment
 		itemsListAdapter = new ItemsListAdapter();
 		itemsListView.setAdapter(itemsListAdapter);
 		
-		encumberanceProgressBar = (TextProgressBar) itemsListView.findViewById(R.id.ph_encum_bar);		
+		encumberanceProgressBar = (TextProgressBar) itemsListView.findViewById(R.id.ph_encum_bar);
 		
 		return view;
 	}

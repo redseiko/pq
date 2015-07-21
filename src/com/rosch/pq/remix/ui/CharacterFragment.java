@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.Stats;
@@ -21,7 +22,6 @@ import de.greenrobot.event.Subscribe;
 
 public class CharacterFragment extends Fragment
 {
-	private TableLayout traitsTable;
 	private TableLayout statsTable;
 	private TextProgressBar levelProgressBar;
 	
@@ -30,7 +30,6 @@ public class CharacterFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.character_fragment, container, false);
 		
-		traitsTable = (TableLayout) view.findViewById(R.id.ph_traits_table);
 		statsTable = (TableLayout) view.findViewById(R.id.ph_stats_table);
 		levelProgressBar = (TextProgressBar) view.findViewById(R.id.ph_level_bar);
 		
@@ -69,22 +68,10 @@ public class CharacterFragment extends Fragment
 	
 	private void refreshTraitsTable(Traits traits)
 	{
-        traitsTable.removeAllViews();
-    	
-        TableRow headerTraits = UiUtils.getHeaderRow(traitsTable.getContext(), "Trait", "Value");
-        traitsTable.addView(headerTraits);
-
-        TableRow nameRow = UiUtils.getTableRow(traitsTable.getContext(), "Name", traits.getName());
-        traitsTable.addView(nameRow);
-
-        TableRow raceRow = UiUtils.getTableRow(traitsTable.getContext(), "Race", traits.getRace());
-        traitsTable.addView(raceRow);
-
-        TableRow classRow = UiUtils.getTableRow(traitsTable.getContext(), "Class", traits.getRole());
-        traitsTable.addView(classRow);
-
-        TableRow levelRow = UiUtils.getTableRow(traitsTable.getContext(), "Level", String.valueOf(traits.getLevel()));
-        traitsTable.addView(levelRow);
+		View view = getView();
+		
+		((TextView) view.findViewById(R.id.info_name_and_race)).setText(getString(R.string.info_name_and_race, traits.getName(), traits.getRace()));
+		((TextView) view.findViewById(R.id.info_level_and_class)).setText(getString(R.string.info_level_and_class, traits.getLevel(), traits.getRole()));
 	}
 	
 	private void refreshLevelProgressBar(int currentExp, int maxExp)

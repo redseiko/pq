@@ -23,6 +23,9 @@
     <string name="level_progressbar_label">Experience</string>
     <string name="level_progressbar_text">%1$d XP until next level</string>
     
+    <string name="info_name_and_race">%1$s the %2$s</string>
+    <string name="info_level_and_class">Lv. %1$d %2$s</string>
+    
     <string name="spell_level_text">Level %1$s</string>
     
     <string name="encumberance_progressbar_label">Encumberance</string>
