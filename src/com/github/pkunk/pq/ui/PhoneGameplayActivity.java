@@ -12,7 +12,6 @@ import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -51,46 +50,53 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     private Toolbar mainToolbar;    
     private DrawerLayout drawerLayout;
     private ListView drawerList;
+    
+    private ViewPager contentViewPager;
+    private PlayerFragmentPagerAdapter contentPagerAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.ph_gameplay);
         
-        ViewPager viewPager = (ViewPager) findViewById(R.id.content_viewpager);
-        PlayerFragmentPagerAdapter pagerAdapter = new PlayerFragmentPagerAdapter(
-        	getSupportFragmentManager(), getResources().getStringArray(R.array.player_fragment_page_titles));
-
-		viewPager.setAdapter(pagerAdapter);
-		viewPager.setOffscreenPageLimit(6);
-		
 		setupToolbar();
+        setupViewPager();		
         setupNavigationDrawer();
-        
-        TabLayout tabLayout = (TabLayout)  findViewById(R.id.content_tablayout);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
 
         playerId = Vfs.getPlayerId(this);
-        if (playerId == null || playerId.length() == 0) {
+        if (playerId == null || playerId.length() == 0)
+        {
             Intent intent = new Intent(PhoneGameplayActivity.this, PhoneRosterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             startActivity(intent);
+
             PhoneGameplayActivity.this.finish();
             return;
         }
 
         // Bind to GameplayService
         Intent intent = new Intent(this, GameplayService.class);
-//        startService(intent);   //todo: remove to let service die
+        //startService(intent);   //todo: remove to let service die
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
         //taskBarUpdater = new TaskBarUpdater(this, R.id.ph_task_bar);
         //taskBarUpdater.execute();
+    }
+    
+    @Override
+    protected void onResume()
+    {
+    	super.onResume();
+    	
+    	mainToolbar.setTitle(contentPagerAdapter.getPageTitle(contentViewPager.getCurrentItem()));
     }
 
     @Override
@@ -111,6 +117,25 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
             Player player = service.getPlayer();
             updateUi(player, false);
         }
+    }
+    
+    private void setupViewPager()
+    {
+        contentViewPager = (ViewPager) findViewById(R.id.content_viewpager);
+        contentPagerAdapter = new PlayerFragmentPagerAdapter(
+        	getSupportFragmentManager(), getResources().getStringArray(R.array.player_fragment_page_titles));
+        
+        contentViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+        {
+        	@Override
+        	public void onPageSelected(int position)
+        	{
+        		mainToolbar.setTitle(contentPagerAdapter.getPageTitle(position));
+        	}
+        });
+
+        contentViewPager.setAdapter(contentPagerAdapter);
+        contentViewPager.setOffscreenPageLimit(6);
     }
 
     private void setupToolbar()
@@ -159,12 +184,14 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     	});
     }
 
-    private void openRoster() {
+    private void openRoster()
+    {
         Intent intent = new Intent(this, PhoneRosterActivity.class);
         startActivity(intent);
     }
 
-    private void openAbout() {
+    private void openAbout()
+    {
     	new DialogFragment() {
     		@Override
     		public Dialog onCreateDialog(Bundle savedInstancedState) {		
