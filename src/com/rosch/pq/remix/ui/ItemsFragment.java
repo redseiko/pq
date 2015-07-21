@@ -34,12 +34,13 @@ public class ItemsFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.items_fragment, container, false);
 		
-		itemsListAdapter = new ItemsListAdapter();
-
 		itemsListView = (ListView) view.findViewById(R.id.items_listview);
+		itemsListView.addHeaderView(inflater.inflate(R.layout.items_weight_cardview, itemsListView, false));
+		
+		itemsListAdapter = new ItemsListAdapter();
 		itemsListView.setAdapter(itemsListAdapter);
 		
-		encumberanceProgressBar = (TextProgressBar) view.findViewById(R.id.ph_encum_bar);
+		encumberanceProgressBar = (TextProgressBar) itemsListView.findViewById(R.id.ph_encum_bar);		
 		
 		return view;
 	}
