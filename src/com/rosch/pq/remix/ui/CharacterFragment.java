@@ -1,18 +1,20 @@
 package com.rosch.pq.remix.ui;
 
+import java.util.Collections;
+import java.util.List;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.pkunk.pq.gameplay.Player;
 import com.github.pkunk.pq.gameplay.Stats;
 import com.github.pkunk.pq.gameplay.Traits;
-import com.github.pkunk.pq.ui.util.UiUtils;
 import com.github.pkunk.pq.ui.view.TextProgressBar;
 import com.rosch.pq.remix.R;
 import com.rosch.pq.remix.events.PlayerModifiedEvent;
@@ -22,7 +24,9 @@ import de.greenrobot.event.Subscribe;
 
 public class CharacterFragment extends Fragment
 {
-	private TableLayout statsTable;
+	private ListView attributesListView;
+	private AttributesListAdapter attributesListAdapter;
+	
 	private TextProgressBar levelProgressBar;
 	
 	@Override
@@ -30,8 +34,14 @@ public class CharacterFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.character_fragment, container, false);
 		
-		statsTable = (TableLayout) view.findViewById(R.id.ph_stats_table);
-		levelProgressBar = (TextProgressBar) view.findViewById(R.id.ph_level_bar);
+		attributesListView = (ListView) view.findViewById(R.id.attributes_listview);
+		attributesListView.addHeaderView(inflater.inflate(R.layout.character_exp_cardview, attributesListView, false));
+		attributesListView.addHeaderView(inflater.inflate(R.layout.character_info_cardview, attributesListView, false));
+		
+		attributesListAdapter = new AttributesListAdapter();
+		attributesListView.setAdapter(attributesListAdapter);
+		
+		levelProgressBar = (TextProgressBar) attributesListView.findViewById(R.id.ph_level_bar);
 		
 		return view;
 	}
@@ -58,15 +68,58 @@ public class CharacterFragment extends Fragment
 		Player player = event.player;
 		
 		if (event.forceRefresh || player.isTraitsUpdated())
-			refreshTraitsTable(player.getTraits());
+			refreshTraits(player.getTraits());
 		
 		refreshLevelProgressBar(player.getCurrentExp(), player.getMaxExp());
 		
         if (event.forceRefresh || player.isStatsUpdated())
-        	refreshStatsTable(player.getStats());
+        {
+        	attributesListAdapter.setAttributeValues(player.getStats());
+        	attributesListAdapter.notifyDataSetChanged();
+        }
 	}
 	
-	private void refreshTraitsTable(Traits traits)
+	private class AttributesListAdapter extends BaseAdapter
+	{
+		private List<Integer> attributeValues = Collections.<Integer>emptyList();
+		
+		public void setAttributeValues(List<Integer> values)
+		{
+			attributeValues = values;
+		}
+		
+		@Override
+		public int getCount()
+		{
+			return attributeValues.size();
+		}
+
+		@Override
+		public Object getItem(int position)
+		{
+			return attributeValues.get(position);
+		}
+
+		@Override
+		public long getItemId(int position)
+		{
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			if (convertView == null)
+				convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.attribute_listitem, parent, false);
+			
+			((TextView) convertView.findViewById(R.id.attribute_title)).setText(Stats.label[position]);
+			((TextView) convertView.findViewById(R.id.attribute_value)).setText(String.valueOf(attributeValues.get(position)));
+			
+			return convertView;
+		}
+	}
+	
+	private void refreshTraits(Traits traits)
 	{
 		View view = getView();
 		
@@ -80,22 +133,5 @@ public class CharacterFragment extends Fragment
 		levelProgressBar.setProgress(currentExp);
 		
 		levelProgressBar.setText(getString(R.string.level_progressbar_text, (maxExp - currentExp)));
-	}
-	
-	private void refreshStatsTable(Stats stats)
-	{
-        statsTable.removeAllViews();
-    	
-        TableRow headerStats = UiUtils.getHeaderRow(statsTable.getContext(), "Stat", "Value");
-        statsTable.addView(headerStats);
-
-        for (int i = 0; i < Stats.STATS_NUM; i++)
-        {
-            String statName = Stats.label[i];
-            String statValue = String.valueOf(stats.get(i));
-
-            TableRow row = UiUtils.getTableRow(statsTable.getContext(), statName, statValue);
-            statsTable.addView(row);
-        }	
 	}
 }

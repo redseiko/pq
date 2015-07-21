@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/xp_progressbar_cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    cardView:cardCornerRadius="2dp"
+    cardView:cardUseCompatPadding="true"
+    cardView:contentPadding="10dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/xp_progressbar_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/level_progressbar_label"
+            android:textStyle="bold" />
+
+        <com.github.pkunk.pq.ui.view.TextProgressBar
+            android:id="@+id/ph_level_bar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/xp_progressbar_label"
+            android:layout_toRightOf="@+id/xp_progressbar_label" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
