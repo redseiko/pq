@@ -97,6 +97,7 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     	super.onResume();
     	
     	mainToolbar.setTitle(contentPagerAdapter.getPageTitle(contentViewPager.getCurrentItem()));
+    	onGameplay();
     }
 
     @Override

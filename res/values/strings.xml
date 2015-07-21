@@ -23,6 +23,8 @@
     <string name="level_progressbar_label">Experience</string>
     <string name="level_progressbar_text">%1$d XP until next level</string>
     
+    <string name="spell_level_text">Level %1$s</string>
+    
     <string name="encumberance_progressbar_label">Encumberance</string>
     <string name="encumberance_progressbar_text">%1$d / %2$d cubits</string>
     
