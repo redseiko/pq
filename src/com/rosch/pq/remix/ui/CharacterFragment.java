@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.github.pkunk.pq.gameplay.Player;
@@ -24,7 +24,7 @@ import de.greenrobot.event.Subscribe;
 
 public class CharacterFragment extends Fragment
 {
-	private ListView attributesListView;
+	private GridView attributesGridView;
 	private AttributesListAdapter attributesListAdapter;
 	
 	private TextProgressBar levelProgressBar;
@@ -34,14 +34,12 @@ public class CharacterFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.character_fragment, container, false);
 		
-		attributesListView = (ListView) view.findViewById(R.id.attributes_listview);
-		attributesListView.addHeaderView(inflater.inflate(R.layout.character_exp_cardview, attributesListView, false));
-		attributesListView.addHeaderView(inflater.inflate(R.layout.character_info_cardview, attributesListView, false));
+		attributesGridView = (GridView) view.findViewById(R.id.attributes_gridview);
 		
 		attributesListAdapter = new AttributesListAdapter();
-		attributesListView.setAdapter(attributesListAdapter);
+		attributesGridView.setAdapter(attributesListAdapter);
 		
-		levelProgressBar = (TextProgressBar) attributesListView.findViewById(R.id.ph_level_bar);
+		levelProgressBar = (TextProgressBar) view.findViewById(R.id.ph_level_bar);
 		
 		return view;
 	}

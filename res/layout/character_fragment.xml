@@ -5,10 +5,15 @@
     android:orientation="vertical"
     android:padding="10dp" >
 
-    <ListView
-        android:id="@+id/attributes_listview"
+    <include layout="@layout/character_exp_cardview" />
+
+    <include layout="@layout/character_info_cardview" />
+
+    <GridView
+        android:id="@+id/attributes_gridview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null" />
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:stretchMode="columnWidth" />
 
 </LinearLayout>
