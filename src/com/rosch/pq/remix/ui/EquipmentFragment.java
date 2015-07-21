@@ -1,5 +1,6 @@
 package com.rosch.pq.remix.ui;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.os.Bundle;
@@ -7,12 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.pkunk.pq.gameplay.Equips;
 import com.github.pkunk.pq.gameplay.Player;
-import com.github.pkunk.pq.ui.util.UiUtils;
 import com.rosch.pq.remix.R;
 import com.rosch.pq.remix.events.PlayerModifiedEvent;
 
@@ -21,13 +22,18 @@ import de.greenrobot.event.Subscribe;
 
 public class EquipmentFragment extends Fragment
 {
-	private TableLayout equipTable;
+	private ListView equipmentListView;
+	private EquipmentListAdapter equipmentListAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.equip_fragment, container, false);
-		equipTable = (TableLayout) view.findViewById(R.id.ph_equip_table);		
+		
+		equipmentListView = (ListView) view.findViewById(R.id.equipment_listview);
+		
+		equipmentListAdapter = new EquipmentListAdapter();
+		equipmentListView.setAdapter(equipmentListAdapter);
 		
 		return view;
 	}
@@ -54,20 +60,52 @@ public class EquipmentFragment extends Fragment
 		Player player = event.player;
 		
 		if (event.forceRefresh || player.isEquipUpdated())
-			refreshEquipTable(player.getEquip());
+		{
+			equipmentListAdapter.setEquipment(player.getEquip());
+			equipmentListAdapter.notifyDataSetChanged();
+		}
 	}
-
-	private void refreshEquipTable(List<String> equipment)
+	
+	private class EquipmentListAdapter extends BaseAdapter
 	{
-        equipTable.removeAllViews();
+		private List<String> equipmentList = Collections.<String>emptyList();
+		
+		public void setEquipment(List<String> equipmentList)
+		{
+			this.equipmentList = equipmentList;
+		}
 
-        for (int i = 0; i < Equips.EQUIP_NUM; i++)
-        {
-            String equipName = Equips.label[i];
-            String equipItem = equipment.get(i);
-            
-            TableRow row = UiUtils.getTableRow(equipTable.getContext(), equipName, equipItem);
-            equipTable.addView(row);
-        }
-	}	
+		@Override
+		public int getCount()
+		{
+			return equipmentList.size();
+		}
+
+		@Override
+		public Object getItem(int position)
+		{
+			return equipmentList.get(position);
+		}
+
+		@Override
+		public long getItemId(int position)
+		{
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			if (convertView == null)
+				convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.equipment_listitem, parent, false);
+			
+			String slotTitle = Equips.label[position];
+			String itemTitle = equipmentList.get(position);
+			
+			((TextView) convertView.findViewById(R.id.equipment_slot_title)).setText(slotTitle);
+			((TextView) convertView.findViewById(R.id.equipment_item_title)).setText(itemTitle);
+			
+			return convertView;
+		}
+	}
 }

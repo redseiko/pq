@@ -65,7 +65,10 @@ public class ItemsFragment extends Fragment
 		Player player = event.player;
 		
 		if (event.forceRefresh || player.isItemsUpdated())
-			refreshItemsTable(player.getInventory(), player.isGoldUpdated());
+		{
+			itemsListAdapter.setItems(player.getInventory());
+			itemsListAdapter.notifyDataSetChanged();
+		}
 		
 		refreshEncumberanceProgressBar(player.getCurrentEncumbrance(), player.getMaxEncumbrance());
 	}
@@ -100,6 +103,9 @@ public class ItemsFragment extends Fragment
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent)
 		{
+			if (position > 0)
+				position = (itemsList.size() - position);
+
 			if (convertView == null)
 				convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_listitem, parent, false);
 			
@@ -112,12 +118,6 @@ public class ItemsFragment extends Fragment
 			return convertView;
 		}
 		
-	}
-
-	private void refreshItemsTable(Map<String, Integer> items, boolean goldUpdated)
-	{
-		itemsListAdapter.setItems(items);
-		itemsListAdapter.notifyDataSetChanged();
 	}
 	
 	private void refreshEncumberanceProgressBar(int currentEncumberance, int maxEncumberance)
