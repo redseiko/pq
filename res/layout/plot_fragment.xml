@@ -34,17 +34,10 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <ScrollView
-        android:id="@+id/ph_plot_scroll"
+    <ListView
+        android:id="@+id/plot_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true" >
-
-        <TableLayout
-            android:id="@+id/ph_plot_table"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="1" />
-    </ScrollView>
+        android:divider="@null" />
 
 </LinearLayout>

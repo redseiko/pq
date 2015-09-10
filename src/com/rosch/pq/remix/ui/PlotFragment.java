@@ -1,5 +1,6 @@
 package com.rosch.pq.remix.ui;
 
+import java.util.Collections;
 import java.util.List;
 
 import android.os.Bundle;
@@ -7,12 +8,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.github.pkunk.pq.gameplay.Player;
-import com.github.pkunk.pq.ui.util.UiUtils;
 import com.github.pkunk.pq.ui.view.TextProgressBar;
 import com.github.pkunk.pq.util.PqUtils;
 import com.rosch.pq.remix.R;
@@ -23,8 +23,9 @@ import de.greenrobot.event.Subscribe;
 
 public class PlotFragment extends Fragment
 {
-	private TableLayout plotTable;
-	private ScrollView plotTableScroll;
+	private ListView plotListView;
+	private PlotListAdapter plotListAdapter;
+	
 	private TextProgressBar developmentProgressBar;
 
 	@Override
@@ -32,8 +33,11 @@ public class PlotFragment extends Fragment
 	{
 		View view = inflater.inflate(R.layout.plot_fragment, container, false);
 		
-		plotTable = (TableLayout) view.findViewById(R.id.ph_plot_table);
-		plotTableScroll = (ScrollView) view.findViewById(R.id.ph_plot_scroll);
+		plotListView = (ListView) view.findViewById(R.id.plot_listview);
+		
+		plotListAdapter = new PlotListAdapter();
+		plotListView.setAdapter(plotListAdapter);
+		
 		developmentProgressBar = (TextProgressBar) view.findViewById(R.id.ph_plot_bar);
 		
 		return view;
@@ -61,23 +65,53 @@ public class PlotFragment extends Fragment
 		Player player = event.player;
 		
 		if (event.forceRefresh || player.isPlotUpdated())
-			refreshPlotTable(player.getPlot());
+		{
+			plotListAdapter.setPlot(player.getPlot());
+			plotListAdapter.notifyDataSetChanged();
+		}
 		
 		refreshDevelopmentProgressBar(player.getCurrentPlotProgress(), player.getMaxPlotProgress());
 	}
-
-	private void refreshPlotTable(List<String> plot)
+	
+	private class PlotListAdapter extends BaseAdapter
 	{
-        plotTable.removeAllViews();
-
-        int lastIndex = plot.size() - 1;
-
-        for (int i = lastIndex; i >= 0; i--) {
-            TableRow row = UiUtils.getCheckedRow(plotTable.getContext(), i != lastIndex, plot.get(i));
-            plotTable.addView(row);
-        }
-        
-        plotTableScroll.fullScroll(ScrollView.FOCUS_UP);
+		private List<String> plotList = Collections.<String>emptyList();
+		
+		public void setPlot(List<String> plot)
+		{
+			plotList = plot;
+		}
+		
+		@Override
+		public int getCount()
+		{
+			return plotList.size();
+		}
+		
+		@Override
+		public Object getItem(int position)
+		{
+			return plotList.get(position);
+		}
+		
+		@Override
+		public long getItemId(int position)
+		{
+			return position;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			if (convertView == null)
+				convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.plot_listitem, parent, false);
+			
+			String plotTitle = plotList.get(position);
+			
+			((TextView) convertView.findViewById(R.id.plot_title)).setText(plotTitle);
+			
+			return convertView;
+		}
 	}
 	
 	private void refreshDevelopmentProgressBar(int currentPlotProgress, int maxPlotProgress)

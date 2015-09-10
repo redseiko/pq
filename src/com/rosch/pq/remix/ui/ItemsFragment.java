@@ -118,7 +118,6 @@ public class ItemsFragment extends Fragment
 			
 			return convertView;
 		}
-		
 	}
 	
 	private void refreshEncumberanceProgressBar(int currentEncumberance, int maxEncumberance)
