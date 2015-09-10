@@ -31,6 +31,7 @@ import com.github.pkunk.pq.service.GameplayServiceListener;
 import com.github.pkunk.pq.util.Vfs;
 import com.rosch.pq.remix.R;
 import com.rosch.pq.remix.events.PlayerModifiedEvent;
+import com.rosch.pq.remix.service.AlarmReceiver;
 import com.rosch.pq.remix.ui.PlayerFragmentPagerAdapter;
 
 import de.greenrobot.event.EventBus;
@@ -82,13 +83,9 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
             PhoneGameplayActivity.this.finish();
             return;
         }
-
-        // Bind to GameplayService
-        Intent intent = new Intent(this, GameplayService.class);
-        //startService(intent);   //todo: remove to let service die
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        //taskBarUpdater = new TaskBarUpdater(this, R.id.ph_task_bar);
-        //taskBarUpdater.execute();
+        
+        AlarmReceiver.stopAlarm(this);
+        startGameplayService();
     }
     
     @Override
@@ -101,22 +98,37 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     }
 
     @Override
-    protected void onStop() {
-        // Unbind from the service
-        if (isBound) {
-            PhoneGameplayActivity.this.service.removeGameplayListener(PhoneGameplayActivity.this);
-            unbindService(connection);
-            isBound = false;
-        }
+    protected void onStop()
+    {
+    	stopGameplayService();
+        AlarmReceiver.startAlarm(this);
+        
         super.onStop();
     }
 
     @Override
-    public void onGameplay() {
-        if (isBound) {
-            // Don't block this thread
+    public void onGameplay()
+    {
+        if (isBound)
+        {
             Player player = service.getPlayer();
             updateUi(player, false);
+        }
+    }
+    
+    private void startGameplayService()
+    {
+        Intent intent = new Intent(this, GameplayService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+    
+    private void stopGameplayService()
+    {
+        if (isBound)
+        {
+            PhoneGameplayActivity.this.service.removeGameplayListener(PhoneGameplayActivity.this);
+            unbindService(connection);
+            isBound = false;            
         }
     }
     
@@ -213,7 +225,8 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
     private final ServiceConnection connection = new ServiceConnection() {
 
         @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
+        public void onServiceConnected(ComponentName className, IBinder service)
+        {
             Log.d(TAG, "onServiceConnected");
 
             GameplayService.GameplayBinder binder = (GameplayService.GameplayBinder) service;
@@ -221,6 +234,7 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
             isBound = true;
 
             PhoneGameplayActivity.this.service.addGameplayListener(PhoneGameplayActivity.this);
+
             Player player = PhoneGameplayActivity.this.service.getPlayer();
             if (player == null || !playerId.equals(player.getPlayerId())) {
                 try {
@@ -233,7 +247,21 @@ public class PhoneGameplayActivity extends AppCompatActivity implements Gameplay
                 PhoneGameplayActivity.this.service.setWidgetOutdated();
             }
 
-            if (player != null) {
+            if (player != null)
+            {
+            	// TODO: de-duplicate me from AlarmReceiver.
+        		long lastAlarmTime = Vfs.readLastAlarmTime(PhoneGameplayActivity.this);		
+        		Log.d("ALARM", "Last time is: " + lastAlarmTime);
+        		
+        		long remainingTime = System.currentTimeMillis() - lastAlarmTime;		
+        		Log.d("ALARM", "Remaining time is: " + remainingTime);
+        		
+        		int tasksCompleted = player.executeTurnsForDuration(remainingTime);        		
+        		Log.d("ALARM", "Tasks done: " + tasksCompleted);
+        		
+        		Vfs.writeLastAlarmTime(PhoneGameplayActivity.this);
+        		player.savePlayer();
+            	
                 updateUi(player, true);
             }
         }

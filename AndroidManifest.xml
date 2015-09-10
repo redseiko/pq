@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="6"
         android:targetSdkVersion="22" />
+    
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />    
 
     <application
         android:allowBackup="true"
@@ -51,6 +53,15 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
+        </receiver>
+        
+        <receiver android:name="com.rosch.pq.remix.service.AlarmReceiver"
+            android:process=":remote" />
+        
+        <receiver android:name="com.rosch.pq.remix.service.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
     </application>
 

@@ -55,6 +55,21 @@ public class Vfs {
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
         return settings.getInt(TAB_STATE, 0);
     }
+    
+    public static void writeLastAlarmTime(Context context)
+    {
+    	SharedPreferences preferences = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+    	SharedPreferences.Editor editor = preferences.edit();
+    	
+    	editor.putLong("LAST_ALARM_TIME", System.currentTimeMillis());
+    	editor.commit();
+    }
+    
+    public static long readLastAlarmTime(Context context)
+    {
+    	SharedPreferences preferences = context.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
+    	return preferences.getLong("LAST_ALARM_TIME", System.currentTimeMillis());
+    }
 
     public static void writePlayerToFile(Context context, String playerId, Map<String, List<String>> dataMap) throws IOException {
         String fileName = playerId + FILE_NAME_SEPARATOR + PqUtils.getShortTimestamp() + ZIP_EXT;

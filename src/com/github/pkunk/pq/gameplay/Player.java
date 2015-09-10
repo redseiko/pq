@@ -365,6 +365,21 @@ public class Player {
         // 20 minutes per level
         return 20 * traits.getLevel() * 60;
     }
+    
+    public int executeTurnsForDuration(long duration)
+    {
+    	int tasksCompleted = 0;
+    	
+    	while (duration > 0)
+    	{
+    		duration -= getCurrentTaskTime();
+    		tasksCompleted++;
+    		
+    		turn();
+    	}
+    	
+    	return tasksCompleted;
+    }
 
     public void turn() {
         Log.d("TURN", currentTask);
